@@ -20,7 +20,7 @@ UI.AddDropdown("Music kit", [
 "Daniel Sadowski, Total Domination",
 "Damjan Mravunac, The Talos Principle",
 "Proxy, Battlepack",
-"Ki:Theroy, MOLOTOV",
+"Ki:Theory, MOLOTOV",
 "Troels Folmann, Uber Blasto Phone",
 "Kelly Bailey, Hazardous Environments",
 "Skog. II-Headshot",
