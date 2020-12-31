@@ -4,7 +4,7 @@ UI.AddDropdown("VoteRevealer - Mode", ["none", "say", "say_team", "PrintChat"]);
 var options = [];
 var queue = [];
 var curtime = Global.Curtime();
-var every = 0.7
+var every = 720
 
 function vote_options() {
     for (var i = 0; i <= Event.GetInt("count"); i++) {
@@ -72,5 +72,5 @@ function reset() {
 }
 Global.RegisterCallback("vote_options", "vote_options");
 Global.RegisterCallback("vote_cast", "vote_cast");
-Global.RegisterCallback("FrameStageNotify", "queue_main");
+Global.RegisterCallback("CreateMove", "queue_main");
 Global.RegisterCallback("player_connect_full", "reset");
