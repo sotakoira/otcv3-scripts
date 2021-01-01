@@ -57,16 +57,22 @@ UI.AddDropdown("Music kit", [
 var original = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
 
 function main() {
-var current = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
-var musickit = UI.GetValue("Music kit");
-
-if (musickit == 0 && (current != original)) {// none
-	Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", original);
+	if (Cheat.FrameStage() != 1) {
     return;
+	}	
+	
+		var current = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
+		var musickit = UI.GetValue("Music kit");
+		if (musickit == 0) {// none
+			if (current !== original) {
+			Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", original);
+			}
+			return;
+		}
+			else if (current !== musickit) {
+			Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", musickit);
+			}
 }
-else if (current != musickit) {
-	Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", musickit);
-}
-}
+
 
 Global.RegisterCallback("FrameStageNotify", "main");

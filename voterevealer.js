@@ -43,7 +43,10 @@ function vote_cast() {
 
 }
 function queue_main() {
-	var mode = UI.GetValue("VoteRevealer - Mode");
+	if (Cheat.FrameStage() != 1) {
+    return;
+	}
+		var mode = UI.GetValue("VoteRevealer - Mode");
 
 		if ((mode == 0 || mode == 3) || queue.length == 0 ) { // none
 		return;
