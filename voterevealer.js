@@ -72,5 +72,5 @@ function reset() {
 }
 Global.RegisterCallback("vote_options", "vote_options");
 Global.RegisterCallback("vote_cast", "vote_cast");
-Global.RegisterCallback("CreateMove", "queue_main");
+Global.RegisterCallback("FrameStageNotify", "queue_main");
 Global.RegisterCallback("player_connect_full", "reset");
