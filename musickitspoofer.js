@@ -3,13 +3,13 @@
 UI.AddDropdown("Music kit", [
 "none",
 "CS:GO",
-"CS:GO 2",
+"musickit_valve_csgo_02",
 "Daniel Sadowski, Crimson Assault",
 "Noisia, Sharpened",
 "Robert Allaire, Insurgency",
-"Sean Murray, A*D*8",
+"Sean Murray, AD8",
 "Feed Me, High Moon",
-"Dren, Death's Head Demolition",
+"Dern, Death's Head Demolition",
 "Austin Wintory, Desert Fire",
 "Sasha, LNOE",
 "Skog, Metal",
@@ -20,10 +20,10 @@ UI.AddDropdown("Music kit", [
 "Daniel Sadowski, Total Domination",
 "Damjan Mravunac, The Talos Principle",
 "Proxy, Battlepack",
-"Ki:Theory, MOLOTOV",
+"Ki:Theroy, MOLOTOV",
 "Troels Folmann, Uber Blasto Phone",
 "Kelly Bailey, Hazardous Environments",
-"Skog, II-Headshot",
+"Skog. II-Headshot",
 "Daniel Sadowski, The 8-Bit Kit",
 "AWOLNATION, I Am",
 "Mord Fustang, Diamonds",
@@ -34,7 +34,7 @@ UI.AddDropdown("Music kit", [
 "Lennie Moore, Java Havana Funkaloo",
 "Darude, Moments CSGO",
 "Beartooth, Aggressive",
-"Blitz Kids, The Good Youth",
+"Blitz Kids,  The Good Youth",
 "Hundredth, FREE",
 "Neck Deep, Life's Not Out to Get You",
 "Roam, Backbone",
@@ -57,14 +57,16 @@ UI.AddDropdown("Music kit", [
 var original = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
 
 function main() {
+var current = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
 var musickit = UI.GetValue("Music kit");
 
-if (musickit == 0) {// none
-Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", original);
+if (musickit == 0 && (current != original)) {// none
+	Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", original);
     return;
 }
-Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", musickit);
-
+else if (current != musickit) {
+	Entity.SetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID", musickit);
+}
 }
 
 Global.RegisterCallback("FrameStageNotify", "main");
