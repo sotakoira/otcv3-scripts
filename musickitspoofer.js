@@ -51,7 +51,10 @@ UI.AddDropdown("Music kit", [
 "Tim Huling, Neo Noir",
 "Sam Marshall, Bodacious",
 "Matt Levine, Drifter",
-"Amon Tobin, All for Dust"
+"Amon Tobin, All for Dust",
+"Darren Korb, Hades Music Kit",
+"Neck Deep, The Lowlife Pack",
+"Scarlxrd, CHAIN$AW.LXADXUT."
 ]);
 
 var original = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
