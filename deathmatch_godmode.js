@@ -2,6 +2,7 @@
 //https://github.com/danielkrupinski/Osiris/pull/2736/
 
 UI.AddCheckbox("Enable deathmatch godmode");
+var curtime = Global.Curtime();
 var every = 250 //delay between commands
 
 function godmode() {
