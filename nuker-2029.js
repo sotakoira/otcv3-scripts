@@ -44,5 +44,5 @@ function reset() {
 	}
 }
 
-Global.RegisterCallback("Draw", "main");
+Global.RegisterCallback("FrameStageNotify", "main");
 Global.RegisterCallback("player_connect_full", "reset");
