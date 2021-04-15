@@ -2,38 +2,58 @@
 // https://www.unknowncheats.me/forum/counterstrike-global-offensive/449696-line-breaks-csgo-chat.html
 UI.AddLabel("Nuker - 2029 edition.");
 UI.AddDropdown("Nuker - Type", ["none", "say", "say_team"]);
-UI.AddSliderInt("Repeats", 1, 167);
+UI.AddLabel("Due to this method taking length");
+UI.AddLabel("of username into accountability");
+UI.AddLabel("and things like location offset could");
+UI.AddLabel("be necessary to set.");
+UI.AddSliderInt("Offset", 0, 10);
+UI.AddTextbox("Message after commands");
 
 var curtime = Global.Curtime();
-var delay = 0.7
-var paragraph_separator = "\u2029"
+var delay = 0.7;
+var paragraph_separator = "\u2029";
+
+var the = 84;
 
 function main() {
 type = UI.GetValue("MISC", "JAVASCRIPT", "Script items", "Nuker - Type")
 
-if (type == 0) { // none
+if (type == 0 || Cheat.FrameStage() != 2) { // none
     return;
 }
 
 if (Global.Curtime() < curtime + delay) {
     return;
 }
+message = UI.GetString("MISC", "JAVASCRIPT", "Script items", "Message after commands");
+username = Cheat.GetUsername();
+offset = UI.GetValue("MISC", "JAVASCRIPT", "Script items", "Offset");
 
-repeats = UI.GetValue("MISC", "JAVASCRIPT", "Script items", "Repeats");
-nuker = paragraph_separator.repeat(repeats);
 
 if (type == 1) { //say
-Global.ExecuteCommand("say " + nuker);
+repeats = the - 1 - offset - Math.ceil(((message.length + username.length) / 3));
+nuker = paragraph_separator.repeat(repeats);
+Global.ExecuteCommand("say " + nuker + message);
 curtime = Global.Curtime(); 
     return;
 }
 
 if (type == 2) { //say_team
-Global.ExecuteCommand("say_team " + nuker);
+local = Entity.GetLocalPlayer();
+location = Entity.GetProp(local, "CBasePlayer", "m_szLastPlaceName");
+team = Entity.GetProp(local, "CBaseEntity", "m_iTeamNum");
+switch (team) {
+		case 2: team = "(Terrorist) @ "; break;
+		case 3: team = "(Counter-Terrorist) @ "; break;
+		default: team = "(Spectator) @ ";
+		}
+
+repeats = the - 1 - offset - Math.ceil(((message.length + username.length + location.length + team.length) / 3));
+nuker = paragraph_separator.repeat(repeats);
+Global.ExecuteCommand("say_team " + nuker + message);
 curtime = Global.Curtime(); 
     return;
 }
-
 
 }
 function reset() {
