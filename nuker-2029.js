@@ -31,7 +31,11 @@ offset = UI.GetValue("MISC", "JAVASCRIPT", "Script items", "Offset");
 
 
 if (type == 1) { //say
-repeats = the - 1 - offset - Math.ceil(((message.length + username.length) / 3));
+local = Entity.GetLocalPlayer();
+local_dead = !Entity.IsAlive(local);
+dead = (local_dead) ? "*DEAD* " : "";
+
+repeats = the - 1 - offset - Math.ceil(((message.length + username.length + dead.length) / 3));
 nuker = paragraph_separator.repeat(repeats);
 Global.ExecuteCommand("say " + nuker + message);
 curtime = Global.Curtime(); 
@@ -40,6 +44,8 @@ curtime = Global.Curtime();
 
 if (type == 2) { //say_team
 local = Entity.GetLocalPlayer();
+local_dead = !Entity.IsAlive(local);
+dead = (local_dead) ? "*DEAD* " : "";
 location = Entity.GetProp(local, "CBasePlayer", "m_szLastPlaceName");
 team = Entity.GetProp(local, "CBaseEntity", "m_iTeamNum");
 switch (team) {
@@ -47,8 +53,7 @@ switch (team) {
 		case 3: team = "(Counter-Terrorist) @ "; break;
 		default: team = "(Spectator) @ ";
 		}
-
-repeats = the - 1 - offset - Math.ceil(((message.length + username.length + location.length + team.length) / 3));
+repeats = the - 1 - offset - Math.ceil(((message.length + username.length + location.length + team.length + dead.length) / 3));
 nuker = paragraph_separator.repeat(repeats);
 Global.ExecuteCommand("say_team " + nuker + message);
 curtime = Global.Curtime(); 
