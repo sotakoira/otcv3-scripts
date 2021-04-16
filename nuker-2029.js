@@ -10,7 +10,7 @@ UI.AddSliderInt("Offset", 0, 10);
 UI.AddTextbox("Message after commands");
 
 var curtime = Global.Curtime();
-var delay = 0.7;
+var delay = 0.67;
 var paragraph_separator = "\u2029";
 
 var the = 84;
