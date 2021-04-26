@@ -10,10 +10,12 @@ match_start = Entity.GetProp(gamerules, "CCSGameRulesProxy", "m_iRoundTime") < 3
 rage = UI.GetValue("Rage", "General", "Enabled");
 if (match_start && !rage) {
 UI.SetValue("Rage", "General", "Enabled", 1);
+UI.SetValue("Misc", "GENERAL", "Miscellaneous", "Extended backtracking", 1);
 Cheat.PrintChat("Match has started: Ragebot has been \x07enabled!");
 }
 else if (!match_start) {
 UI.SetValue("Rage", "General", "Enabled", 0);
+UI.SetValue("Misc", "GENERAL", "Miscellaneous", "Extended backtracking", 0);
 Cheat.PrintChat("Match hasn't started yet: Ragebot has been \x04disabled!");
 }
 }	
