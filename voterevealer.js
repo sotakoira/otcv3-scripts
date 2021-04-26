@@ -4,12 +4,13 @@ UI.AddDropdown("VoteRevealer - Mode", ["none", "say", "say_team", "PrintChat"]);
 var options = [];
 var queue = [];
 var curtime = Global.Curtime();
-var every = 720
+var every = 700
 
 function vote_options() {
     for (var i = 0; i <= Event.GetInt("count"); i++) {
         options[i] = Event.GetString("option" + (i + 1)).toLowerCase();
     }
+	
 }
 function vote_cast() {
 	var mode = UI.GetValue("VoteRevealer - Mode");
@@ -25,6 +26,7 @@ function vote_cast() {
         var name = Entity.GetName(entityid);
 		var choice = options[vote_option];
 		switch (team) {
+		case 1: team = "[Spectators] "; break;
 		case 2: team = "[Terrorists] "; break;
 		case 3: team = "[Counter-Terrorists] "; break;
 		default: team = "[Vote] ";
@@ -42,6 +44,7 @@ function vote_cast() {
     }
 
 }
+
 function queue_main() {
 	if (Cheat.FrameStage() != 1) {
     return;
@@ -57,13 +60,13 @@ function queue_main() {
 		}
 		
 		if (mode == 1) { //say
-		Global.ExecuteCommand("say " + queue.shift());
+		Global.ExecuteCommand("say \u2029" + queue.shift());
 		curtime = Global.Curtime(); 
 		return;
 		}
 		
 		if (mode == 2) { //say_team
-		Global.ExecuteCommand("say_team " + queue.shift());
+		Global.ExecuteCommand("say_team \u2029" + queue.shift());
 		curtime = Global.Curtime(); 
 		return;
 		}
@@ -71,8 +74,14 @@ function queue_main() {
 }
 
 function reset() {
+	localplayer = Entity.GetLocalPlayer();
+	userid = Event.GetInt("userid");
+	if (Entity.GetEntityFromUserID(userid) == localplayer) {
 	curtime = 0;
+	}
+	
 }
+
 Global.RegisterCallback("vote_options", "vote_options");
 Global.RegisterCallback("vote_cast", "vote_cast");
 Global.RegisterCallback("FrameStageNotify", "queue_main");
