@@ -36,14 +36,7 @@ side = Math.ceil(Math.random() * 450) * (Math.round(Math.random()) ? 1 : -1);
 
 cs_active = UI.GetValue("Call surrender");
 if (cs_active) {
-local = Entity.GetLocalPlayer();
-team = Entity.GetProp(local, "DT_BaseEntity", "m_iTeamNum");
-gamerules = Entity.GetGameRulesProxy();
-t_alive = Entity.GetProp(gamerules, "CCSGameRulesProxy", "m_iMatchStats_PlayersAlive_T");
-ct_alive = Entity.GetProp(gamerules, "CCSGameRulesProxy", "m_iMatchStats_PlayersAlive_CT");
-if (team == 2) { players = t_alive; }
-else if (team == 3) { players = ct_alive; }
-else return;
+players = Entity.GetTeammates().length;
 
 if (players < 5) {Cheat.ExecuteCommand("callvote surrender"); }
 }
