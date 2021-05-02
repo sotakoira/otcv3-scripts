@@ -6,6 +6,7 @@ UI.AddCheckbox("Autodrop bomb");
 UI.AddCheckbox("AntiAFK");
 UI.AddCheckbox("Call surrender");
 UI.AddCheckbox("Call timeout");
+UI.AddCheckbox("Kick on teamkill");
 
 var weapons_buying = [
 "ak47",
@@ -89,6 +90,23 @@ Cheat.ExecuteCommand("drop");
 
 }
 
+function player_death() {
+tkk_active = UI.GetValue("Kick on teamkill");	
+if (tkk_active) {
+	attacker = Event.GetInt("attacker");
+    userid = Event.GetInt("userid");
+    attacker_index = Entity.GetEntityFromUserID(attacker);
+    userid_index = Entity.GetEntityFromUserID(userid);
+	userid_localplayer = Entity.IsLocalPlayer(userid_index);
+    attacker_isteammate = Entity.IsTeammate(attacker_index);
+	
+if (attacker_isteammate && userid_localplayer) {
+	Cheat.ExecuteCommand("callvote kick " + attacker);
+}
+}
+
+}
+
 function antiafk() {
 afk_active = UI.GetValue("AntiAFK");
 local = Entity.GetLocalPlayer();
@@ -123,4 +141,5 @@ Cheat.RegisterCallback("round_start", "round_start");
 Cheat.RegisterCallback("round_freeze_end", "round_freeze_end");
 Cheat.RegisterCallback("bomb_pickup", "bomb_pickup");
 Cheat.RegisterCallback("enter_buyzone", "enter_buyzone");
+Cheat.RegisterCallback("player_death", "player_death");
 Cheat.RegisterCallback("CreateMove", "cm");
