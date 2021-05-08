@@ -7,6 +7,7 @@ UI.AddCheckbox("AntiAFK");
 UI.AddCheckbox("Call surrender");
 UI.AddCheckbox("Call timeout");
 UI.AddCheckbox("Kick on teamkill");
+UI.AddCheckbox("Reduce rate and FPS");
 
 var weapons_buying = [
 "ak47",
@@ -21,19 +22,25 @@ var weapons_buying = [
 "m249",
 "negev",
 "xm1014",
-]
+];
 
 var forward = 0;
 var side = 0;
 
-function round_start() {
+var rate_cache = Convar.GetFloat("rate");
+var fps_cache = Convar.GetFloat("fps_max");
+
+function generate_cmd() {
 	
 afk_active = UI.GetValue("AntiAFK");
 if (afk_active) {
 forward = Math.ceil(Math.random() * 450) * (Math.round(Math.random()) ? 1 : -1);
 side = Math.ceil(Math.random() * 450) * (Math.round(Math.random()) ? 1 : -1);
 
-}	
+}
+}
+	
+function call_surrender() {
 
 cs_active = UI.GetValue("Call surrender");
 if (cs_active) {
@@ -43,7 +50,7 @@ if (players < 5) {Cheat.ExecuteCommand("callvote surrender"); }
 }
 }
 	
-function round_freeze_end() {
+function call_timeout() {
 to_active = UI.GetValue("Call timeout");
 if (to_active) {
 local = Entity.GetLocalPlayer();
@@ -59,7 +66,7 @@ if (timeouts > 0) {Cheat.ExecuteCommand("callvote starttimeout"); }
 }
 }
 
-function bomb_pickup() {
+function autodrop_bomb() {
 ab_active = UI.GetValue("Autodrop bomb");
 userid = Event.GetInt("userid");
 userid_index = Entity.GetEntityFromUserID(userid);
@@ -72,15 +79,13 @@ Cheat.ExecuteCommand("drop");
 
 }
 
-function enter_buyzone() {
-userid = Event.GetInt("userid");
-canbuy = Event.GetInt("canbuy");
+function autobuy_weapon() {
 abw = UI.GetValue("Autobuy weapon");
 adw_active = UI.GetValue("Autodrop weapon");
-userid_index = Entity.GetEntityFromUserID(userid);
-is_localplayer = Entity.IsLocalPlayer(userid_index);
+local = Entity.GetLocalPlayer();
+in_buyzone = Entity.GetProp(local, "DT_CSPlayer", "m_bInBuyZone");
 
-if (is_localplayer && canbuy && abw != 0) {
+if (in_buyzone && abw != 0) {
 Cheat.ExecuteCommand("buy " + weapons_buying[abw - 1]);
 
 if (adw_active) {
@@ -90,7 +95,7 @@ Cheat.ExecuteCommand("drop");
 
 }
 
-function player_death() {
+function kick_on_tk() {
 tkk_active = UI.GetValue("Kick on teamkill");	
 if (tkk_active) {
 	attacker = Event.GetInt("attacker");
@@ -131,15 +136,36 @@ in_attack2 = false;
 }
 }
 
-function cm() {
-antiafk()
+function reduceusage() {
+if (UI.IsMenuOpen()) {	
+reduce_active = UI.GetValue("Reduce rate and FPS");
+if (reduce_active && !shouldchange) {
+Convar.SetFloat("rate", 20480);
+Convar.SetFloat("fps_max", 49);
+shouldchange = true;
+}
+
+else if (!reduce_active && shouldchange) {
+Convar.SetFloat("rate", rate_cache);
+Convar.SetFloat("fps_max", fps_cache);
+shouldchange = false;
+}
+
+}
 	
 }
 
 
-Cheat.RegisterCallback("round_start", "round_start");
-Cheat.RegisterCallback("round_freeze_end", "round_freeze_end");
-Cheat.RegisterCallback("bomb_pickup", "bomb_pickup");
-Cheat.RegisterCallback("enter_buyzone", "enter_buyzone");
-Cheat.RegisterCallback("player_death", "player_death");
-Cheat.RegisterCallback("CreateMove", "cm");
+Cheat.RegisterCallback("round_start", "generate_cmd");
+Cheat.RegisterCallback("round_start", "call_surrender");
+
+Cheat.RegisterCallback("round_freeze_end", "autobuy_weapon");
+Cheat.RegisterCallback("round_freeze_end", "call_timeout");
+
+Cheat.RegisterCallback("bomb_pickup", "autodrop_bomb");
+
+Cheat.RegisterCallback("player_death", "kick_on_tk");
+
+Cheat.RegisterCallback("CreateMove", "antiafk");
+
+Cheat.RegisterCallback("Draw", "reduceusage");
