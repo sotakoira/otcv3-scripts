@@ -29,6 +29,7 @@ var side = 0;
 
 var rate_cache = Convar.GetFloat("rate");
 var fps_cache = Convar.GetFloat("fps_max");
+var shouldchange = false;
 
 function generate_cmd() {
 	
@@ -155,6 +156,15 @@ shouldchange = false;
 	
 }
 
+function unload() {
+reduce_active = UI.GetValue("Reduce rate and FPS");
+if (reduce_active) {
+Convar.SetFloat("rate", rate_cache);
+Convar.SetFloat("fps_max", fps_cache);
+shouldchange = false;
+}
+}
+
 
 Cheat.RegisterCallback("round_start", "generate_cmd");
 Cheat.RegisterCallback("round_start", "call_surrender");
@@ -169,3 +179,5 @@ Cheat.RegisterCallback("player_death", "kick_on_tk");
 Cheat.RegisterCallback("CreateMove", "antiafk");
 
 Cheat.RegisterCallback("Draw", "reduceusage");
+
+Cheat.RegisterCallback("Unload", "unload");
