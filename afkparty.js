@@ -13,6 +13,7 @@ UI.AddLabel("Relative to csgo/sound/");
 UI.AddTextbox("File name");
 UI.AddSliderFloat("Sound length", 0.0, 10.0);
 UI.AddCheckbox("Reduce rate and FPS");
+UI.AddCheckbox("Radio spammer");
 
 var weapons_buying = [
 "ak47",
@@ -29,6 +30,22 @@ var weapons_buying = [
 "xm1014",
 ];
 
+var radio_colors = [
+"\u0001",	//white
+"\u0002",	//darkred
+"\u0004",	//green
+"\u0005",	//lightgreen
+"\u0006",	//lime
+"\u0007",	//palered
+"\u0008",	//grey
+"\u000E",	//orchid
+"\u000F",	//lightred
+"\u0010",	//gold
+"", 		//empty
+];
+
+var rclength = radio_colors.length;
+
 var forward = 0;
 var side = 0;
 
@@ -37,6 +54,9 @@ var fps_cache = Convar.GetFloat("fps_max");
 var shouldchange = false;
 
 var v_curtime = 0;
+var rs_curtime = 0;
+
+var in_attack2 = false;
 
 function generate_cmd() {
 	
@@ -96,8 +116,34 @@ in_buyzone = Entity.GetProp(local, "DT_CSPlayer", "m_bInBuyZone");
 if (in_buyzone && abw != 0) {
 Cheat.ExecuteCommand("buy " + weapons_buying[abw - 1]);
 
+}
+
+}
+
+function autodrop_weapon() {
+adw_active = UI.GetValue("Misc", "JAVASCRIPT", "Script Items", "Autodrop weapon");
 if (adw_active) {
+userid = Event.GetInt("userid");
+item = Event.GetString("item");
+userid_index = Entity.GetEntityFromUserID(userid);
+userid_localplayer = Entity.IsLocalPlayer(userid_index);
+if (userid_localplayer && item != "c4") {	
 Cheat.ExecuteCommand("drop");	
+}
+}
+
+}
+
+function autoequip_weapon() {
+adw_active = UI.GetValue("Misc", "JAVASCRIPT", "Script Items", "Autodrop weapon");
+if (adw_active) {
+userid = Event.GetInt("userid");
+item = Event.GetString("item");
+userid_index = Entity.GetEntityFromUserID(userid);
+userid_localplayer = Entity.IsLocalPlayer(userid_index);
+if (userid_localplayer && item != "c4") {
+Cheat.ExecuteCommand("slot2");
+Cheat.ExecuteCommand("slot1");
 }
 }
 
@@ -221,12 +267,27 @@ Sound.StopMicrophone();
 }
 }
 
+function radiospammer() {
+if (Cheat.FrameStage() != 1) {return;}
+rs_active = UI.GetValue("Misc", "JAVASCRIPT", "Script Items", "Radio spammer");
+if (rs_active) {
+if (Global.Curtime() > rs_curtime + 10.2) {
+
+for (i =1; i <= 3; i++) {
+Cheat.ExecuteCommand("playerchatwheel . " + radio_colors[Math.floor(Math.random() * rclength)] + "afkparty.js");
+}
+rs_curtime = Global.Curtime(); 
+}
+}
+}
+
 function reset() {
-	localplayer = Entity.GetLocalPlayer();
-	userid = Event.GetInt("userid");
-	if (Entity.GetEntityFromUserID(userid) == localplayer) {
+localplayer = Entity.GetLocalPlayer();
+userid = Event.GetInt("userid");
+if (Entity.GetEntityFromUserID(userid) == localplayer) {
 	v_curtime = 0;
-	}
+	rs_curtime = 0;
+}
 	
 
 }
@@ -238,6 +299,10 @@ Convar.SetFloat("rate", rate_cache);
 Convar.SetFloat("fps_max", fps_cache);
 shouldchange = false;
 }
+if (in_attack2) {
+Cheat.ExecuteCommand("-attack2");
+in_attack2 = false;
+}
 }
 
 
@@ -246,6 +311,10 @@ Cheat.RegisterCallback("round_start", "call_surrender");
 
 Cheat.RegisterCallback("round_freeze_end", "autobuy_weapon");
 Cheat.RegisterCallback("round_freeze_end", "call_timeout");
+
+Cheat.RegisterCallback("item_pickup", "autoequip_weapon");
+
+Cheat.RegisterCallback("item_equip", "autodrop_weapon");
 
 Cheat.RegisterCallback("bomb_pickup", "autodrop_bomb");
 
@@ -260,7 +329,7 @@ Cheat.RegisterCallback("CreateMove", "antiafk");
 Cheat.RegisterCallback("Draw", "reduceusage");
 Cheat.RegisterCallback("Draw", "vischeck");
 
-
+Cheat.RegisterCallback("FrameStageNotify", "radiospammer");
 Cheat.RegisterCallback("FrameStageNotify", "soundcheck");
 
 Cheat.RegisterCallback("Unload", "unload");
