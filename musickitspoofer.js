@@ -54,7 +54,13 @@ UI.AddDropdown("Music kit", [
 "Amon Tobin, All for Dust",
 "Darren Korb, Hades Music Kit",
 "Neck Deep, The Lowlife Pack",
-"Scarlxrd, CHAIN$AW.LXADXUT."
+"Scarlxrd, CHAIN$AW.LXADXUT.",
+"Austin Wintory, Mocha Petal",
+"Chipzel, ~Yellow Magic~",
+"Freaky DNA, Vici",
+"Jesse Harlin, Astro Bellum",
+"Laura Shigihara: Work Hard, Play Hard",
+"Sarah Schachner, KOLIBRI"
 ]);
 
 var original = Entity.GetProp(Entity.GetLocalPlayer(), "CCSPlayerResource", "m_nMusicID");
